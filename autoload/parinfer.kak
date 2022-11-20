@@ -1,0 +1,1 @@
+/home/user/.config/kak/plugins/parinfer-rust/rc/parinfer.kak

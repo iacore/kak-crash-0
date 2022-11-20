@@ -1,0 +1,3 @@
+#!/usr/bin/fish
+set -x KAKOUNE_CONFIG_DIR (pwd)
+kak -e "execute-keys <pagedown><pagedown><pagedown><pagedown>" UsefulMod.patch
