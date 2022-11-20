@@ -6,29 +6,6 @@ evaluate-commands %sh{
 
     autoload_directory /usr/share/kak/autoload
 }
-
-hook global BufCreate .*\.v %{
-    set-option buffer filetype v
-    #lsp-disable
-    set-option buffer tabstop 4
-    set-option buffer indentwidth 0
-}
-
-hook global BufCreate .* %{
-    hook buffer InsertChar \n %{ exec -draft k<a-x> s^\h+<ret>y j<a-h>P }
-}
-
-hook global BufCreate .*\.janet %{
-    set-option buffer filetype janet
-}
-
-hook global WinSetOption filetype=(clojure|lisp|scheme|racket|janet) %{
-    set-option buffer indentwidth 2
-}
-
-map global normal <a-left> '<c-o>'
-map global normal <a-right> '<tab>'
-
 map global insert <c-left> '<esc>b;i'
 map global insert <c-right> '<esc>w;i'
 hook global ModeChange pop:insert:.* %{
@@ -136,18 +113,3 @@ hook global WinSetOption filetype=(cpp|zig) %{
     lsp-auto-hover-insert-mode-disable
 }
 
-# configure zls: we enable zig fmt, reference and semantic highlighting
-hook global WinSetOption filetype=zig %{
-    set-option buffer formatcmd 'zig fmt --stdin'
-    set-option window lsp_auto_highlight_references true
-    set-option global lsp_server_configuration zls.zig_lib_path="/usr/lib/zig"
-    set-option -add global lsp_server_configuration zls.warn_style=true
-    set-option -add global lsp_server_configuration zls.enable_semantic_tokens=true
-    hook window -group semantic-tokens BufReload .* lsp-semantic-tokens
-    hook window -group semantic-tokens NormalIdle .* lsp-semantic-tokens
-    hook window -group semantic-tokens InsertIdle .* lsp-semantic-tokens
-    hook -once -always window WinSetOption filetype=.* %{
-        remove-hooks window semantic-tokens
-    }
-}
-### kak-lsp config end
